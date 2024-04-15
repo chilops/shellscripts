@@ -1,21 +1,22 @@
 #!/bin/bash
 
 ID=$(id -u)
-TIMESTAMP=$(date +%F-%H:%M:%S)
+TIMESTAMP=$(date +%F-%H-%M-%S)
 R="\e[31m"
 G="\e[32m"
 N="\e[0m"
 
 LOGFILE="/tmp/$0-$TIMESTAMP.log"
-echo "script name: $0"
 
-VALIDATE(){                #validate is a function here
-    if [ $1 -ne 0 ]        #here using arguments as $1, $2
+echo "Script started executing at $TIMESTAMP" &>> $LOGFILE
+
+VALIDATE(){
+    if [ $1 -ne 0 ]
     then
         echo -e "ERROR:: $2 ... $R FAILED $N"
         exit 1
     else
-        echo "$2 ... $G SUCCESS $N"
+        echo -e "$2 ... $G SUCCESS $N"
     fi
 }
 
@@ -27,11 +28,10 @@ else
     echo "You are root user"
 fi # fi means reverse of if, indicating condition end
 
-yum install mysql -y    &>> $LOGFILE
+yum install mysql -y &>> $LOGFILE
 
 VALIDATE $? "Installing MySQL"
 
-yum install git -y      &>> $LOGFILE
+yum install git -y &>> $LOGFILE
 
 VALIDATE $? "Installing GIT"
-
